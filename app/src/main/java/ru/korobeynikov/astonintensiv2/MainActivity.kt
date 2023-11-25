@@ -1,11 +1,36 @@
 package ru.korobeynikov.astonintensiv2
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.AttributeSet
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.RotateAnimation
+import androidx.databinding.DataBindingUtil
+import ru.korobeynikov.astonintensiv2.databinding.ActivityMainBinding
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding=DataBindingUtil.setContentView<ActivityMainBinding>(this,R.layout.activity_main)
+        binding.view=this
+    }
+
+    fun rotateDrum(){
+        val drumView=binding.drumView
+        val anim=ObjectAnimator.ofFloat(drumView,"rotation",0f,360f)
+        anim.duration=800
+        anim.repeatCount=Animation.INFINITE
+        anim.start()
+        Thread{
+            TimeUnit.SECONDS.sleep(3)
+            anim.pause()
+        }.start()
     }
 }
