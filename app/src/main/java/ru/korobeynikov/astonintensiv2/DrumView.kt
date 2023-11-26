@@ -8,6 +8,8 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Point
 import android.graphics.PointF
+import android.graphics.RectF
+import android.graphics.Region
 import android.util.AttributeSet
 import android.view.View
 
@@ -19,8 +21,7 @@ class DrumView(context:Context,attrs:AttributeSet):View(context,attrs) {
 
     lateinit var point1: PointF
 
-
-    val path=Path()
+    //val path=Path()
     val path1=Path()
     val path2=Path()
     val path3=Path()
@@ -28,6 +29,11 @@ class DrumView(context:Context,attrs:AttributeSet):View(context,attrs) {
     val path5=Path()
     val path6=Path()
     val path7=Path()
+    val pathPoint=Path()
+
+    val region=Region()
+
+    lateinit var canvas: Canvas
 
     init {
         p.strokeWidth=3f
@@ -40,14 +46,30 @@ class DrumView(context:Context,attrs:AttributeSet):View(context,attrs) {
         centerX=w/2f
         centerY=h/2f
 
-        point1=PointF(centerX*0.51f,centerY*0.95f)
-
+        //point1=PointF(centerX*0.51f,centerY*0.95f)
         //point2=PointF(centerX*0.94f,centerY*0.7f)
         //point3=PointF(centerX*1.06f,centerY*0.55f)
     }
 
+    fun selectColor():Int{
+
+        val rectF=RectF()
+        val pathArray= arrayOf(path1,path2,path3,path4,path5,path6,path7)
+        for(i in pathArray.indices){
+            val path=pathArray[i]
+            path.computeBounds(rectF,true)
+            region.setPath(path,Region(rectF.left.toInt(),rectF.top.toInt(),rectF.right.toInt(),rectF.bottom.toInt()))
+            //val isCorrectColor=region.contains(centerX.toInt(),(centerY*0.9).toInt())
+            val isCorrectColor=region.contains((centerX*0.9).toInt(),(centerY*0.9).toInt())
+            if(isCorrectColor) return i
+        }
+        return -1
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
+        this.canvas=canvas
 
         p.color=Color.RED
         path1.moveTo(centerX,centerY)
