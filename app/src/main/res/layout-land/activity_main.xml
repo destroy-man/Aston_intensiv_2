@@ -16,8 +16,9 @@
 
         <ru.korobeynikov.astonintensiv2.DrumView
             android:id="@+id/drumView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -30,34 +31,34 @@
             android:onClick="@{()->view.rotateDrum()}"
             android:text="Крутить барабан"
             app:layout_constraintEnd_toStartOf="@+id/btnReset"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/selectColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/drumView"
+            app:layout_constraintEnd_toEndOf="@+id/drumView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/drumView"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_arrow_drop_down_black_48dp" />
 
         <ImageView
             android:id="@+id/randomImage"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toBottomOf="@+id/btnRotateDrum"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ru.korobeynikov.astonintensiv2.CustomText
             android:id="@+id/customText"
-            android:visibility="gone"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toBottomOf="@+id/btnRotateDrum">
 
         </ru.korobeynikov.astonintensiv2.CustomText>
@@ -66,11 +67,18 @@
             android:id="@+id/btnReset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Reset"
             android:onClick="@{()->view.reset()}"
+            android:text="Reset"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnRotateDrum"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
