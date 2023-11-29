@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DrumViewModel:ViewModel() {
+class DrumViewModel : ViewModel() {
 
     private var liveData: MutableLiveData<Array<Any>>? = null
 

@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()->view.rotateDrum()}"
-            android:text="Крутить барабан"
+            android:text="@string/button_rotate_drum"
             app:layout_constraintEnd_toStartOf="@+id/btnReset"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -41,22 +41,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/drumView"
-            app:srcCompat="@drawable/baseline_arrow_drop_down_black_48dp" />
+            app:srcCompat="@drawable/baseline_arrow_drop_down_black_48dp"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/randomImage"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnRotateDrum"
+            tools:ignore="ContentDescription"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ru.korobeynikov.astonintensiv2.CustomText
             android:id="@+id/customText"
-            android:visibility="gone"
             android:layout_width="100dp"
             android:layout_height="50dp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnRotateDrum">
 
@@ -66,8 +68,8 @@
             android:id="@+id/btnReset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Reset"
             android:onClick="@{()->view.reset()}"
+            android:text="@string/button_reset"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnRotateDrum"
             app:layout_constraintTop_toTopOf="parent" />

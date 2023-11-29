@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AstonIntensiv2</string>
+    <string name="button_rotate_drum">Крутить барабан</string>
+    <string name="button_reset">Reset</string>
 </resources>

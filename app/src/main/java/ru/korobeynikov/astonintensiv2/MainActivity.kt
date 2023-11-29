@@ -1,21 +1,11 @@
 package ru.korobeynikov.astonintensiv2
 
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
-import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.view.animation.RotateAnimation
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import coil.annotation.ExperimentalCoilApi
@@ -28,119 +18,114 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
-
-    lateinit var anim:ObjectAnimator
-    lateinit var drumView: DrumView
-    lateinit var randomImage: ImageView
-    lateinit var customText: CustomText
-    lateinit var drumViewModel: DrumViewModel
-    var isFirstClick=false
+    private var isFirstClick = false
+    private var isAnimPaused = true
+    private var urlSite = "https://loremflickr.com/640/360"
+    private lateinit var anim: ObjectAnimator
+    private lateinit var drumView: DrumView
+    private lateinit var randomImage: ImageView
+    private lateinit var customText: CustomText
+    private lateinit var drumViewModel: DrumViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding=DataBindingUtil.setContentView<ActivityMainBinding>(this,R.layout.activity_main)
-        binding.view=this
-        drumViewModel=ViewModelProvider(this)[DrumViewModel::class.java]
-        drumView=binding.drumView
-        randomImage=binding.randomImage
-        customText=binding.customText
-
-        val drumLiveData = drumViewModel.getData()
-//        drumLiveData?.observe(this) {
-//            drumView = it[0] as DrumView
-//            anim = it[1] as ObjectAnimator
-//        }
+        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        binding.view = this
+        drumViewModel = ViewModelProvider(this)[DrumViewModel::class.java]
+        drumView = binding.drumView
+        randomImage = binding.randomImage
+        customText = binding.customText
+        drumViewModel.getData()?.observe(this) {
+            drumView.rotation = it[0] as Float
+            isAnimPaused = it[1] as Boolean
+            if (!isAnimPaused)
+                rotateDrum()
+        }
     }
 
     @OptIn(ExperimentalCoilApi::class)
-    fun clearCacheCoil(){
-        val imageLoader=this.imageLoader
-        imageLoader.diskCache?.remove("https://loremflickr.com/640/360")
-        imageLoader.memoryCache?.remove(MemoryCache.Key("https://loremflickr.com/640/360"))
+    fun clearCacheCoil() {
+        val imageLoader = this.imageLoader
+        imageLoader.diskCache?.remove(urlSite)
+        imageLoader.memoryCache?.remove(MemoryCache.Key(urlSite))
     }
 
-    fun rotateDrum(){
-        if(!isFirstClick)
-            anim=ObjectAnimator.ofFloat(drumView,"rotation",0f,360f)
-
-        //val duration=Random.nextLong(500,2000)
-        //val countSeconds=Random.nextLong(1,10)
-        val duration=800L
-        val countSeconds=3L
-
-        anim.duration=duration
-        anim.repeatCount=Animation.INFINITE
-        if(!isFirstClick) {
+    fun rotateDrum() {
+        if (!isFirstClick)
+            anim = ObjectAnimator.ofFloat(drumView, "rotation", 0f, 360f)
+        anim.duration = Random.nextLong(500, 2000)
+        anim.repeatCount = Animation.INFINITE
+        if (!isFirstClick) {
             anim.start()
-            isFirstClick=true
-        }
-        else
+            isFirstClick = true
+        } else
             anim.resume()
-        Thread{
-            TimeUnit.SECONDS.sleep(countSeconds)
+        isAnimPaused = false
+        Thread {
+            TimeUnit.SECONDS.sleep(Random.nextLong(1, 10))
             anim.pause()
-
-            val angleRotation=anim.animatedValue.toString().toFloat().toInt()
-            when(angleRotation){
-                in 0..40, in 331..360->{
+            isAnimPaused = true
+            when (anim.animatedValue.toString().toFloat().toInt()) {
+                in 0..40, in 351..360 -> {
                     runOnUiThread {
                         clearCacheCoil()
-                        randomImage.visibility=View.VISIBLE
-                        randomImage.load("https://loremflickr.com/640/360")
-                        customText.visibility=View.GONE
+                        randomImage.visibility = View.VISIBLE
+                        randomImage.load(urlSite)
+                        customText.visibility = View.GONE
                     }
                 }
-                in 41..90->{
+                in 41..90 -> {
                     runOnUiThread {
-                        randomImage.visibility=View.GONE
-                        customText.visibility=View.VISIBLE
+                        randomImage.visibility = View.GONE
+                        customText.visibility = View.VISIBLE
                     }
                 }
-                in 91..120->{
-                    runOnUiThread {
-                        clearCacheCoil()
-                        randomImage.visibility=View.VISIBLE
-                        randomImage.load("https://loremflickr.com/640/360")
-                        customText.visibility=View.GONE
-                    }
-                }
-                in 121..180->{
-                    runOnUiThread {
-                        randomImage.visibility=View.GONE
-                        customText.visibility=View.VISIBLE
-                    }
-                }
-                in 181..250->{
+                in 91..140 -> {
                     runOnUiThread {
                         clearCacheCoil()
-                        randomImage.visibility=View.VISIBLE
-                        randomImage.load("https://loremflickr.com/640/360")
-                        customText.visibility=View.GONE
+                        randomImage.visibility = View.VISIBLE
+                        randomImage.load(urlSite)
+                        customText.visibility = View.GONE
                     }
                 }
-                in 251..270->{
+                in 141..190 -> {
                     runOnUiThread {
-                        randomImage.visibility=View.GONE
-                        customText.visibility=View.VISIBLE
+                        randomImage.visibility = View.GONE
+                        customText.visibility = View.VISIBLE
                     }
                 }
-                in 271..330->{
+                in 191..240 -> {
                     runOnUiThread {
-                        randomImage.visibility=View.GONE
-                        customText.visibility=View.VISIBLE
+                        clearCacheCoil()
+                        randomImage.visibility = View.VISIBLE
+                        randomImage.load(urlSite)
+                        customText.visibility = View.GONE
+                    }
+                }
+                in 241..290 -> {
+                    runOnUiThread {
+                        randomImage.visibility = View.GONE
+                        customText.visibility = View.VISIBLE
+                    }
+                }
+                in 291..350 -> {
+                    runOnUiThread {
+                        randomImage.visibility = View.GONE
+                        customText.visibility = View.VISIBLE
                     }
                 }
             }
         }.start()
     }
 
-    fun reset(){
-        randomImage.visibility=View.GONE
-        customText.visibility=View.GONE
+    fun reset() {
+        randomImage.visibility = View.GONE
+        customText.visibility = View.GONE
     }
 
     override fun onStop() {
         super.onStop()
-        drumViewModel.loadData(arrayOf(drumView,anim))
+        if (isFirstClick)
+            drumViewModel.loadData(arrayOf(anim.animatedValue, isAnimPaused))
     }
 }
